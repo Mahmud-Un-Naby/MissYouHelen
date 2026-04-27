@@ -112,18 +112,6 @@ body::after {
   background: linear-gradient(90deg, transparent, rgba(255, 107, 91, 0.7), transparent);
 }
 
-.eyebrow {
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: var(--ink-soft);
-  margin: 0 0 16px;
-}
-
-.eyebrow time {
-  font-style: normal;
-}
-
 h1 {
   font-family: var(--font-display);
   font-size: clamp(2.6rem, 4vw, 3.6rem);
@@ -188,6 +176,41 @@ h1 {
   margin: 22px 0 0;
   font-size: 1.05rem;
   color: var(--ink-soft);
+}
+
+.audio-block {
+  margin-top: 26px;
+  display: grid;
+  gap: 12px;
+}
+
+.audio-label {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: var(--ink-soft);
+}
+
+.subtitle-track {
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.65);
+  padding: 10px 0;
+}
+
+.subtitle-track span {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: subtitle-scroll 16s linear infinite;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.audio-player {
+  width: 100%;
 }
 
 .side {
@@ -263,6 +286,15 @@ noscript {
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes subtitle-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
   }
 }
 
