@@ -257,6 +257,8 @@ if (counters.length > 0) {
 
   // Compose mood: base phase -> season transform -> weather modifier
   async function computeAndApplyMood() {
+    // Respect manual override if set by the chooser UI
+    if (window.mood && window.mood.manualActive) return;
     const now = new Date();
     let phase = phaseFromClock(now);
     let sunrise = null;
@@ -308,6 +310,20 @@ if (counters.length > 0) {
     BODY.dataset.phase = phase;
     BODY.dataset.season = season;
     BODY.dataset.source = (CONFIG.lat && CONFIG.lon && weather) ? 'solar+weather' : 'clock';
+
+    // Publish current state for the chooser UI and diagnostics
+    if (!window.mood) window.mood = {};
+    window.mood.current = {
+      phase,
+      season,
+      weather: weather ? weather.token : 'none',
+      weatherIntensity: weather ? weather.intensity : 0,
+      source: BODY.dataset.source,
+    };
+
+    if (typeof window.__syncMoodChooser__ === 'function') {
+      window.__syncMoodChooser__(window.mood.current);
+    }
   }
 
   // Kick off scheduler
@@ -318,4 +334,119 @@ if (counters.length > 0) {
     setInterval(() => fetchWeather(CONFIG.lat, CONFIG.lon), CONFIG.weatherTTL);
   }
 
+  // Expose internals for the manual UI module
+  try {
+    window.__BASE_PALETTES__ = BASE_PALETTES;
+    window.__applyWeatherModifier__ = applyWeatherModifier;
+    window.__recomputeMood__ = computeAndApplyMood;
+  } catch (e) {
+    // ignore
+  }
+
+})();
+
+// Manual mood chooser bindings and public API
+(function () {
+  const BODY = document.body;
+  // Manual override state
+  const MANUAL = { active: false, phase: null, weather: null };
+
+  function normalizeWeatherToken(token) {
+    if (!token || token === 'none') return null;
+    if (token === 'clear') return { token: 'clear', intensity: 0.9 };
+    if (token === 'gloom') return { token: 'gloom', intensity: 0.8 };
+    if (token === 'rain') return { token: 'rain', intensity: 1 };
+    return null;
+  }
+
+  // Apply manual mood (blocks automatic updates until resync)
+  function applyManual(phase, weatherToken) {
+    MANUAL.active = true;
+    if (!window.mood) window.mood = {};
+    window.mood.manualActive = true;
+    MANUAL.phase = phase;
+    MANUAL.weather = normalizeWeatherToken(weatherToken);
+    // apply base palette immediately
+    const base = (window && window.__BASE_PALETTES__) ? window.__BASE_PALETTES__[phase] : null;
+    if (base) {
+      Object.keys(base).forEach(k => document.documentElement.style.setProperty(k, base[k]));
+    }
+    // apply weather overlay
+    if (MANUAL.weather) {
+      const applyWeatherModifier = window.__applyWeatherModifier__;
+      if (typeof applyWeatherModifier === 'function') applyWeatherModifier(MANUAL.weather);
+      BODY.dataset.weather = MANUAL.weather.token;
+      BODY.dataset.weatherIntensity = String(MANUAL.weather.intensity);
+    } else {
+      BODY.dataset.weather = 'none';
+      BODY.dataset.weatherIntensity = '0';
+    }
+    BODY.dataset.phase = phase;
+    BODY.dataset.season = BODY.dataset.season || '';
+    BODY.dataset.source = 'manual';
+
+    syncChooser({ phase, weather: MANUAL.weather ? MANUAL.weather.token : 'none' });
+  }
+
+  function resync() {
+    MANUAL.active = false;
+    if (window.mood) window.mood.manualActive = false;
+    MANUAL.phase = null;
+    MANUAL.weather = null;
+    // trigger a recompute by calling global recompute if available
+    if (window && window.__recomputeMood__) {
+      Promise.resolve(window.__recomputeMood__()).then(() => {
+        if (window.mood && window.mood.current) {
+          syncChooser(window.mood.current);
+        }
+      });
+    }
+  }
+
+  // Wire UI when available
+  function wireUI() {
+    const chooser = document.getElementById('mood-chooser');
+    if (!chooser) return;
+    const phaseSel = document.getElementById('mood-phase');
+    const weatherSel = document.getElementById('mood-weather');
+    const applyBtn = document.getElementById('mood-apply');
+    const resyncBtn = document.getElementById('mood-resync');
+
+    applyBtn.addEventListener('click', () => {
+      const p = phaseSel.value;
+      const w = weatherSel.value;
+      applyManual(p, w);
+    });
+
+    resyncBtn.addEventListener('click', () => {
+      resync();
+    });
+  }
+
+  function syncChooser(state) {
+    const phaseSel = document.getElementById('mood-phase');
+    const weatherSel = document.getElementById('mood-weather');
+    if (!phaseSel || !weatherSel || !state) return;
+
+    if (state.phase) phaseSel.value = state.phase;
+    if (state.weather) weatherSel.value = state.weather === 'gloom' ? 'gloom' : state.weather;
+    if (state.weather === 'none') weatherSel.value = 'none';
+  }
+
+  // Expose lightweight global API for debug and recompute
+  window.mood = window.mood || {};
+  window.mood.applyManual = applyManual;
+  window.mood.resync = resync;
+  window.mood.sync = syncChooser;
+
+  // Helper exposure for apply routines used above (set by main closure)
+  // If main closure didn't expose, set placeholders
+  window.__BASE_PALETTES__ = window.__BASE_PALETTES__ || null;
+  window.__applyWeatherModifier__ = window.__applyWeatherModifier__ || null;
+  window.__recomputeMood__ = window.__recomputeMood__ || null;
+  window.__syncMoodChooser__ = syncChooser;
+
+  document.addEventListener('DOMContentLoaded', wireUI);
+  // also attempt to wire immediately
+  wireUI();
 })();

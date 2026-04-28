@@ -68,6 +68,29 @@
         </aside>
       </main>
     </div>
+    <!-- Mood chooser: manual override UI -->
+    <div id="mood-chooser" aria-hidden="false">
+      <label for="mood-phase">Phase</label>
+      <select id="mood-phase">
+        <option value="dawn">Dawn</option>
+        <option value="morning">Morning</option>
+        <option value="noon">Noon</option>
+        <option value="afternoon">Afternoon</option>
+        <option value="evening">Evening</option>
+        <option value="night">Night</option>
+      </select>
+      <label for="mood-weather">Weather</label>
+      <select id="mood-weather">
+        <option value="none">Auto / None</option>
+        <option value="clear">Clear</option>
+        <option value="gloom">Gloom/Overcast</option>
+        <option value="rain">Rain</option>
+      </select>
+      <div class="mood-actions">
+        <button id="mood-apply" type="button">Apply</button>
+        <button id="mood-resync" type="button">Re-sync</button>
+      </div>
+    </div>
 
     <script src="assets/js/main.js" defer></script>
   </body>
