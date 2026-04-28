@@ -449,4 +449,23 @@ if (counters.length > 0) {
   document.addEventListener('DOMContentLoaded', wireUI);
   // also attempt to wire immediately
   wireUI();
+
+  // Auto-resync on page load and when page regains focus (e.g., after refresh or tab switch)
+  function autoResync() {
+    if (window.mood && typeof window.mood.resync === 'function') {
+      window.mood.resync();
+    }
+  }
+
+  // Resync on initial page load
+  document.addEventListener('DOMContentLoaded', autoResync);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoResync);
+  } else {
+    // If DOMContentLoaded already fired, call directly
+    autoResync();
+  }
+
+  // Resync when page regains focus (tab switch, refresh, etc.)
+  window.addEventListener('focus', autoResync);
 })();
