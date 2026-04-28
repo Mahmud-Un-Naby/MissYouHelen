@@ -12,10 +12,86 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- Theme System - Modular CSS -->
+    <link rel="stylesheet" href="assets/css/_tokens.css" />
+    <link rel="stylesheet" href="assets/css/themes/base.css" />
+    <link rel="stylesheet" href="assets/css/themes/times/morning.css" />
+    <link rel="stylesheet" href="assets/css/themes/weather/rain.css" />
+    <!-- Legacy styles (will be phased out) -->
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body data-theme-enabled="true" data-weather-enabled="false" data-fixed-timezone="" data-latitude="" data-longitude="" data-weather-provider="open-meteo">
     <div class="grain" aria-hidden="true"></div>
+    <!-- Rain overlay for weather effects -->
+    <div id="rain-overlay" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="none">
+        <defs>
+          <style>
+            .rain-drop {
+              stroke: rgba(200, 220, 240, 0.6);
+              stroke-width: 2;
+              stroke-linecap: round;
+              opacity: 0.7;
+            }
+            .rain-drop.light {
+              opacity: 0.4;
+              stroke-width: 1.5;
+            }
+            .rain-drop.heavy {
+              opacity: 0.85;
+              stroke-width: 2.5;
+            }
+          </style>
+        </defs>
+        <!-- Layer 1: Light raindrops (parallax far) -->
+        <g class="rain-droplet rain-layer-1" opacity="0.4">
+          <line class="rain-drop light" x1="150" y1="0" x2="140" y2="80" />
+          <line class="rain-drop light" x1="280" y1="0" x2="275" y2="85" />
+          <line class="rain-drop light" x1="420" y1="0" x2="415" y2="90" />
+          <line class="rain-drop light" x1="580" y1="0" x2="570" y2="88" />
+          <line class="rain-drop light" x1="720" y1="0" x2="710" y2="92" />
+          <line class="rain-drop light" x1="850" y1="0" x2="845" y2="87" />
+          <line class="rain-drop light" x1="1000" y1="0" x2="990" y2="95" />
+          <line class="rain-drop light" x1="1150" y1="0" x2="1145" y2="82" />
+          <line class="rain-drop light" x1="1300" y1="0" x2="1290" y2="90" />
+          <line class="rain-drop light" x1="1450" y1="0" x2="1440" y2="88" />
+          <line class="rain-drop light" x1="1600" y1="0" x2="1595" y2="85" />
+          <line class="rain-drop light" x1="1750" y1="0" x2="1740" y2="93" />
+        </g>
+        <!-- Layer 2: Medium raindrops (parallax mid) -->
+        <g class="rain-droplet rain-layer-2" opacity="0.6">
+          <line class="rain-drop" x1="80" y1="0" x2="60" y2="100" />
+          <line class="rain-drop" x1="220" y1="0" x2="200" y2="105" />
+          <line class="rain-drop" x1="360" y1="0" x2="340" y2="102" />
+          <line class="rain-drop" x1="520" y1="0" x2="500" y2="108" />
+          <line class="rain-drop" x1="680" y1="0" x2="660" y2="105" />
+          <line class="rain-drop" x1="800" y1="0" x2="780" y2="110" />
+          <line class="rain-drop" x1="950" y1="0" x2="930" y2="107" />
+          <line class="rain-drop" x1="1100" y1="0" x2="1080" y2="103" />
+          <line class="rain-drop" x1="1250" y1="0" x2="1230" y2="112" />
+          <line class="rain-drop" x1="1400" y1="0" x2="1380" y2="106" />
+          <line class="rain-drop" x1="1550" y1="0" x2="1530" y2="104" />
+          <line class="rain-drop" x1="1700" y1="0" x2="1680" y2="109" />
+          <line class="rain-drop" x1="1840" y1="0" x2="1820" y2="105" />
+        </g>
+        <!-- Layer 3: Heavy raindrops (parallax near) -->
+        <g class="rain-droplet rain-layer-3" opacity="0.8">
+          <line class="rain-drop heavy" x1="40" y1="0" x2="10" y2="120" />
+          <line class="rain-drop heavy" x1="180" y1="0" x2="150" y2="125" />
+          <line class="rain-drop heavy" x1="320" y1="0" x2="290" y2="122" />
+          <line class="rain-drop heavy" x1="480" y1="0" x2="450" y2="128" />
+          <line class="rain-drop heavy" x1="640" y1="0" x2="610" y2="125" />
+          <line class="rain-drop heavy" x1="760" y1="0" x2="730" y2="130" />
+          <line class="rain-drop heavy" x1="910" y1="0" x2="880" y2="127" />
+          <line class="rain-drop heavy" x1="1060" y1="0" x2="1030" y2="123" />
+          <line class="rain-drop heavy" x1="1210" y1="0" x2="1180" y2="132" />
+          <line class="rain-drop heavy" x1="1360" y1="0" x2="1330" y2="126" />
+          <line class="rain-drop heavy" x1="1510" y1="0" x2="1480" y2="124" />
+          <line class="rain-drop heavy" x1="1660" y1="0" x2="1630" y2="129" />
+          <line class="rain-drop heavy" x1="1810" y1="0" x2="1780" y2="125" />
+        </g>
+      </svg>
+    </div>
     <div class="page">
       <header class="site-header">
         <div class="stamp">missyouhelen.com</div>
@@ -92,6 +168,9 @@
       </div>
     </div>
 
+    <!-- Theme Engine - Loads real-world environmental data and applies themes -->
+    <script src="assets/js/theme-engine.js" defer></script>
+    <!-- Main App -->
     <script src="assets/js/main.js" defer></script>
   </body>
 </html>

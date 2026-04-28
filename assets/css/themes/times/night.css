@@ -1,0 +1,11 @@
+/* Night Theme (20:00 - 4:59) - Deep blues/purples, minimal light */
+
+:root[data-time="night"],
+html[data-time="night"] {
+  --bg-top: #0f1724;
+  --bg-bottom: #071028;
+  --card-bg: rgba(8, 12, 20, 0.68);
+  --grain-opacity: 0.26;
+  --ink: #dbeafe;
+  --ink-soft: #93c5fd;
+}

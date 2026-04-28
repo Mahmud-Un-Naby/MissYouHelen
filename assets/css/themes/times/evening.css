@@ -1,0 +1,11 @@
+/* Evening Theme (17:00 - 19:59) - Warm-to-cool transition, soft shadows */
+
+:root[data-time="evening"],
+html[data-time="evening"] {
+  --bg-top: #ffecec;
+  --bg-bottom: #e9f0ff;
+  --card-bg: rgba(18, 16, 21, 0.65);
+  --grain-opacity: 0.20;
+  --ink: #f5f5fa;
+  --ink-soft: #c9cad6;
+}

@@ -1,0 +1,11 @@
+/* Afternoon Theme (14:00 - 16:59) - Warm golden light */
+
+:root[data-time="afternoon"],
+html[data-time="afternoon"] {
+  --bg-top: #fff3e6;
+  --bg-bottom: #f0f5ff;
+  --card-bg: rgba(255, 248, 240, 0.82);
+  --grain-opacity: 0.14;
+  --ink: #1b2430;
+  --ink-soft: #3d4d61;
+}

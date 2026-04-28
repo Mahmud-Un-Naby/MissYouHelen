@@ -1,0 +1,11 @@
+/* Noon Theme (11:00 - 13:59) - Peak brightness, saturated */
+
+:root[data-time="noon"],
+html[data-time="noon"] {
+  --bg-top: #e8f6ff;
+  --bg-bottom: #e2fef4;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --grain-opacity: 0.06;
+  --ink: #0f1724;
+  --ink-soft: #2a3a52;
+}

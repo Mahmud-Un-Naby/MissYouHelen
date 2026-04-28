@@ -1,0 +1,11 @@
+/* Morning Theme (7:00 - 10:59) - Bright, clear, energetic */
+
+:root[data-time="morning"],
+html[data-time="morning"] {
+  --bg-top: #fff7e6;
+  --bg-bottom: #e6f7ff;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --grain-opacity: 0.12;
+  --ink: #1c2331;
+  --ink-soft: #3c4352;
+}

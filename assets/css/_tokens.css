@@ -1,0 +1,53 @@
+/* Design Tokens - Core values for the entire theme system */
+
+:root {
+  /* Typography */
+  --font-body: "Space Grotesk", sans-serif;
+  --font-display: "Fraunces", serif;
+
+  /* Colors - Light theme base (overridden per time/weather/env) */
+  --ink: #1c2331;
+  --ink-soft: #3c4352;
+  --accent: #ff6b5b;
+  --accent-2: #2cb3a5;
+  --paper: rgba(255, 255, 255, 0.78);
+  --stroke: rgba(28, 35, 49, 0.08);
+
+  /* Layout */
+  --page-max: 1120px;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+
+  /* Shadows & Effects */
+  --shadow: 0 24px 60px rgba(22, 29, 42, 0.16);
+
+  /* Time-of-day background gradients (overridden per time theme) */
+  --bg-top: #f7e6d5;
+  --bg-bottom: #e2efff;
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --grain-opacity: 0.25;
+
+  /* Weather effect variables (managed by theme engine) */
+  --weather-type: "clear";
+  --weather-intensity: 0;
+  --rain-opacity: 0;
+  --rain-speed: 2s;
+  --rain-angle: 0deg;
+  --sky-darkening: 0;
+
+  /* Environmental variables (managed by theme engine) */
+  --wind-speed-kmh: 0;
+  --wind-angle: 0deg;
+  --wind-intensity: 0;
+  --temp-celsius: 15;
+  --temp-saturation-shift: 0%;
+  --temp-hue-shift: 0deg;
+  --uv-index: 0;
+  --uv-glare-opacity: 0;
+  --uv-saturation-boost: 0%;
+  --pressure-mb: 1013;
+  --pressure-haze: 0;
+
+  /* Color scheme hint */
+  color-scheme: light;
+}

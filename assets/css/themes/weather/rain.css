@@ -1,0 +1,113 @@
+/* Rain Weather Effect - Overlaid on time-of-day themes */
+
+/* Rain effect only applies when data-weather="rain" or data-weather="heavy-rain" */
+html[data-weather="rain"],
+html[data-weather="heavy-rain"] {
+  /* Darken sky based on intensity */
+  --bg-top: #b8c5d6;
+  --bg-bottom: #8fa0b8;
+  --card-bg: rgba(40, 50, 70, 0.70);
+  --grain-opacity: 0.35;
+
+  /* Increase ink contrast for rainy conditions */
+  --ink: #1a1f2e;
+  --ink-soft: #4a5568;
+}
+
+/* Heavy rain intensifies the effect */
+html[data-weather="heavy-rain"] {
+  --bg-top: #6b7d94;
+  --bg-bottom: #4a5a75;
+  --card-bg: rgba(20, 30, 50, 0.75);
+  --grain-opacity: 0.45;
+}
+
+/* Rain overlay container */
+#rain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--rain-opacity, 0);
+  transition: opacity 1s ease-in-out;
+}
+
+/* SVG rain container with animation */
+#rain-overlay svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Individual rain drop animation - parameterized by wind */
+@keyframes rain-fall {
+  0% {
+    transform: translateY(-100px) translateX(var(--drop-x, 0px)) skewY(var(--rain-angle, 0deg));
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(calc(var(--drop-x, 0px) + var(--rain-drift, 50px))) skewY(var(--rain-angle, 0deg));
+    opacity: 0.3;
+  }
+}
+
+/* Apply rain animation to SVG droplets */
+html[data-weather="rain"] #rain-overlay svg,
+html[data-weather="heavy-rain"] #rain-overlay svg {
+  animation: rain-fall var(--rain-speed, 2s) linear infinite;
+}
+
+/* Rain droplet group animation for parallax */
+.rain-droplet {
+  animation: inherit;
+}
+
+.rain-droplet:nth-child(1) {
+  --drop-x: 0px;
+  --rain-drift: 0px;
+  animation-delay: 0s;
+}
+
+.rain-droplet:nth-child(2) {
+  --drop-x: 100px;
+  --rain-drift: 30px;
+  animation-delay: 0.2s;
+}
+
+.rain-droplet:nth-child(3) {
+  --drop-x: 200px;
+  --rain-drift: 60px;
+  animation-delay: 0.4s;
+}
+
+.rain-droplet:nth-child(4) {
+  --drop-x: 300px;
+  --rain-drift: 90px;
+  animation-delay: 0.6s;
+}
+
+.rain-droplet:nth-child(5) {
+  --drop-x: -100px;
+  --rain-drift: 20px;
+  animation-delay: 0.1s;
+}
+
+/* Gloom overlay for rainy conditions */
+html[data-weather="rain"]::before,
+html[data-weather="heavy-rain"]::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(100, 120, 150, calc(0.1 * var(--weather-intensity, 0.5)));
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+}

@@ -1,0 +1,11 @@
+/* Dawn Theme (5:00 - 6:59) - Soft pastels, gentle light */
+
+:root[data-time="dawn"],
+html[data-time="dawn"] {
+  --bg-top: #fff1e6;
+  --bg-bottom: #f3e8ff;
+  --card-bg: rgba(255, 248, 240, 0.82);
+  --grain-opacity: 0.18;
+  --ink: #2b2b33;
+  --ink-soft: #5a5a66;
+}
