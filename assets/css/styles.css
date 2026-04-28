@@ -12,6 +12,11 @@
   --page-max: 1120px;
   --radius-lg: 28px;
   --radius-md: 18px;
+  /* Theme engine tokens (overridden at runtime) */
+  --bg-top: #f7e6d5;
+  --bg-bottom: #e2efff;
+  --card-bg: rgba(255,255,255,0.78);
+  --grain-opacity: 0.25;
 }
 
 * {
@@ -24,7 +29,8 @@ body {
   font-family: var(--font-body);
   line-height: 1.5;
   color: var(--ink);
-  background: linear-gradient(135deg, #f7e6d5 0%, #f9f4ed 40%, #e4f4f2 70%, #e2efff 100%);
+  background: linear-gradient(135deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  transition: background 120s linear, color 60s linear;
   padding: 48px 20px 64px;
   position: relative;
   overflow-x: hidden;
@@ -64,7 +70,7 @@ body::after {
   background-image: radial-gradient(rgba(28, 35, 49, 0.05) 1px, transparent 1px);
   background-size: 4px 4px;
   mix-blend-mode: multiply;
-  opacity: 0.25;
+  opacity: var(--grain-opacity);
   pointer-events: none;
   z-index: 1;
 }
@@ -90,7 +96,7 @@ body::after {
 }
 
 .card {
-  background: var(--paper);
+  background: var(--card-bg, var(--paper));
   border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.7);
   padding: clamp(32px, 5vw, 56px);
